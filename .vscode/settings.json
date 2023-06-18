@@ -1,0 +1,24 @@
+{
+  "editor.tabCompletion": "onlySnippets",
+  "emmet.triggerExpansionOnTab": true,
+  "emmet.syntaxProfiles": {
+    "svelte": "html",
+    "typescript": "html",
+    "javascriptreact": "html",
+    "typescriptreact": "html",
+    "html": {
+      "attr_quotes": "double",
+      "self_closing_tag": true
+    },
+    "jsx": {
+      "attr_quotes": "double"
+    }
+  },
+  "emmet.includeLanguages": {
+    "svelte": "html",
+    "typescript": "html",
+    "javascriptreact": "html",
+    "typescriptreact": "html",
+    "javascript": "javascriptreact"
+  }
+}
