@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import TodoItem from '~/components/TodoItem'
 import { prisma } from '~/db'
+import ClientDemo from '~/components/client-demo'
 
 async function getTodos() {
   'use server'
@@ -39,6 +40,10 @@ export default async function Page() {
           return <TodoItem key={item.id} id={item.id} title={item.title} complete={item.complete} handleCheckChange={handleCheckChange} />
         })}
       </ul>
+
+      <hr />
+
+      <ClientDemo />
     </div>
   )
 }
