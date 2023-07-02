@@ -1,5 +1,4 @@
 'use client'
-import { prisma } from '~/db'
 
 type TodoItemProps = {
   id: string
