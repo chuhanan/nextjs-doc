@@ -22,5 +22,6 @@
     "javascriptreact": "html",
     "typescriptreact": "html",
     "javascript": "javascriptreact"
-  }
+  },
+  "files.eol": "auto"
 }

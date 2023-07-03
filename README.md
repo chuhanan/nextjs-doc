@@ -49,3 +49,15 @@ npx prisma migrate dev --name init
 
 npx prisma studio
 ```
+
+### 开发 qa 列表
+
+- `src` 和 `app dir` 能否混用
+  - 配置互斥
+- 国际化方案
+  - nextjs 自带的
+    https://github.com/vercel/next.js/blob/canary/examples/app-dir-i18n-routing/i18n-config.ts demo 地址
+    缺点: 功能不全 少了 <Trans> 等格式化
+  - next-translate
+    老方案, 支持`nextjs 最新版` 支持`app dir`可以节省服务端资源, 可以直接迁移之前的组件
+    缺点: 第三方

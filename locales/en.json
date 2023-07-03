@@ -1,6 +1,7 @@
 {
   "server-component": {
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "html-label": "<div>label</div><span>{{amount}}</span>"
   },
   "counter": {
     "increment": "Increment",

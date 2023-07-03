@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import TodoItem from '~/components/TodoItem'
+import TodoItem from '~/components/todo-item'
 import { prisma } from '~/db'
 import ClientDemo from '~/components/client-demo'
 
