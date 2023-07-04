@@ -13,6 +13,7 @@ export default async function Home({ params: { lang } }) {
       <LocaleSwitcher />
       <p>Current locale: {lang}</p>
       <p>This text is rendered on the server: {locale['server-component'].welcome}</p>
+      <div>{locale['server-component']['html-label']}</div>
       <Counter dictionary={locale.counter} />
     </main>
   )

@@ -4,6 +4,6 @@
   "singleQuote": true,
   "trailingComma": "all",
   "arrowParens": "always",
-  "printWidth": 300,
+  "printWidth": 150,
   "endOfLine": "auto"
 }
