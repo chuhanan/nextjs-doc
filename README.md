@@ -55,9 +55,15 @@ npx prisma studio
 - `src` 和 `app dir` 能否混用
   - 配置互斥
 - 国际化方案
+
   - nextjs 自带的
     https://github.com/vercel/next.js/blob/canary/examples/app-dir-i18n-routing/i18n-config.ts demo 地址
     缺点: 功能不全 少了 <Trans> 等格式化
   - next-translate
     老方案, 支持`nextjs 最新版` 支持`app dir`可以节省服务端资源, 可以直接迁移之前的组件
     缺点: 第三方
+
+- 使用并行路由拆分不同设备的组件
+  - `@mobile` 和 `@pc`
+  - `layout` 放在外面, 不可以使用 `html` 和 `body` 等标签
+  - 如果加载了 `@pc` 的组件 `@mobile` 的服务端代码会执行, 但是其中的的 `client` 端组件不会加载, 达到了资源拆分的效果

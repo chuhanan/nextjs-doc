@@ -1,22 +1,11 @@
-import { headers, cookies } from 'next/headers'
-import { isDevice } from '~/utils/device'
+import ClientChild from './_child'
 
-interface IServerProps {
-  lang: string
-  slug: string[]
-  searchParams: Record<string, string>
-}
-
-export default function ProductPage(props: IServerProps) {
-  const headerList = headers()
-  const cookieStore = cookies()
-  const isMobile = isDevice(headerList.get('user-agent'), 'h5')
-  console.log(props, 'props')
-  console.log(cookieStore.getAll(), 'cookie')
-
+export default function Product() {
+  console.log('mobile ===')
   return (
     <div>
-      <div>ProductPage pc</div>
+      <div>mobile</div>
+      <ClientChild />
     </div>
   )
 }
