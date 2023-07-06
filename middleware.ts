@@ -9,10 +9,7 @@ export default createIntlMiddleware({
   // If this locale is matched, pathnames work without a prefix (e.g. `/about`)
   defaultLocale: 'en',
   // The locale can be used without a prefix (e.g. `/en/about`).
-  routing: {
-    type: 'prefix',
-    prefix: 'always', // 处理如果是默认语言的情况 /en 会自动跳转到 / 去掉语言前缀的问题
-  },
+  localePrefix: 'always', // 处理如果是默认语言的情况 /en 会自动跳转到 / 去掉语言前缀的问题
   domains: [
     // {
     //   domain: 'zolplay.com',
