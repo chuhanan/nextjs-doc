@@ -25,7 +25,7 @@ export default async function middleware(request: NextRequest) {
   })
   const response: NextResponse = handleI18nRouting(request)
 
-  middwareSessionToken(request, response)
+  await middwareSessionToken(request, response)
 
   // Alter the response
   response.headers.set('x-default-locale', defaultLocale)
