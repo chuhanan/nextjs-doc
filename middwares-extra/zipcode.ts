@@ -1,6 +1,7 @@
 import { minimatch } from 'minimatch'
 import { NextRequest } from 'next/server'
 import { LANGUAGE_REGULAR } from '~/constants'
+import { callApi } from '~/utils/axios'
 import { getCookie, setCookie } from '~/utils/cookies'
 import { getValueFromReqHeaders } from '~/utils/req-headers'
 
@@ -10,58 +11,42 @@ const SET_DEFAULT_ZIPCODE_URLS = ['/product/*/{0..9}*']
 
 const toShippingNumber = (isShippingOrder) => (isShippingOrder ? '1' : '0')
 
-function getSimpleInfo(req) {
-  return fetch('/ec/so/porder/simple', {
+async function getSimpleInfo(req) {
+  return callApi('/ec/so/porder/simple', {
     method: 'GET',
     headers: {
       ...req.headers,
     },
-  }).then((res) => {
-    return res.json().then((data) => {
-      return data
-    })
   })
 }
 
-function createPorder(req, params) {
-  return fetch('/ec/so/porder', {
+async function createPorder(req, params) {
+  return callApi('/ec/so/porder', {
     method: 'POST',
     headers: {
       ...req.headers,
     },
     body: JSON.stringify(params),
-  }).then((res) => {
-    return res.json().then((data) => {
-      return data
-    })
   })
 }
 
-function updateZipcode(req, params) {
-  return fetch('/ec/so/porder/zipcode', {
+async function updateZipcode(req, params) {
+  return callApi('/ec/so/porder/zipcode', {
     method: 'POST',
     headers: {
       ...req.headers,
     },
     body: JSON.stringify(params),
-  }).then((res) => {
-    return res.json().then((data) => {
-      return data
-    })
   })
 }
 
-function getDefaultZipcode(req: NextRequest, params) {
+async function getDefaultZipcode(req: NextRequest, params) {
   const allSearchParams = new URL(req.url).searchParams
-  return fetch(`/ec/so/porder/zipcode?${allSearchParams.toString()}`, {
+  return callApi(`/ec/so/porder/zipcode?${allSearchParams.toString()}`, {
     method: 'GET',
     headers: {
       ...req.headers,
     },
-  }).then((res) => {
-    return res.json().then((data) => {
-      return data
-    })
   })
 }
 
@@ -72,18 +57,21 @@ function isOverride(req) {
 }
 
 export default async function zipcodeMiddware(request, response) {
-  const globalState = JSON.parse(getValueFromReqHeaders(request, 'global-state') || '""')
+  const globalStateStr = getValueFromReqHeaders(request, 'global-state')
+  const globalState = {} //JSON.parse(globalStateStr ? globalStateStr : '{}')
   let porderInfo = null
   let defaultZipcodeInfo = null
 
-  if (globalState) {
+  if (Object.keys(globalState).length > 0) {
     porderInfo = globalState
   } else {
     porderInfo = await getSimpleInfo(request)
   }
+  console.log(porderInfo, 'porderInfo')
   const isOverridePage = isOverride(request)
   const searchParams = new URL(request.url).searchParams
-  const urlZipcode = searchParams.get('zipcode').replace(/\D/g, '') || ''
+
+  const urlZipcode = searchParams.get('zipcode') ? searchParams.get('zipcode').replace(/\D/g, '') : ''
 
   if (urlZipcode) {
     if (!porderInfo.zipcode) {
@@ -149,8 +137,8 @@ export default async function zipcodeMiddware(request, response) {
   //是否是生鲜直邮
   const isMof = String(porderInfo.is_mof ? 1 : 0)
   //切换zipcode之前是否支持直邮
-  let preShippingOrder = getCookie('is_shipping_order_mobile') || '0'
-  let preIsMof = getCookie('is_mof') || '0'
+  let preShippingOrder = getCookie(response, 'is_shipping_order_mobile') || '0'
+  let preIsMof = getCookie(response, 'is_mof') || '0'
 
   const isShippingOrder = toShippingNumber(porderInfo.is_shipping_order)
   //是否从非直邮切换到直邮区域
@@ -163,26 +151,27 @@ export default async function zipcodeMiddware(request, response) {
   const isChangeDeliveryArea = +(!!porderInfo.zipcode && preShippingOrder !== isShippingOrder && isShippingOrder === '0')
   const isChangeMof = +(!!porderInfo.zipcode && isShippingOrder === '1' && preIsMof !== isMof && isMof === '1')
 
-  setCookie('NEW_ZIP_CITY', porderInfo.addr_city || '')
-  setCookie('NEW_ZIP_CODE', zipcode || '')
-  setCookie('DELIVERY_DATE', porderInfo.delivery_pickup_date || '')
-  setCookie('is_change_ship_area', `${isChangeShipArea}` || '')
-  setCookie('is_change_delivery_area', `${isChangeDeliveryArea}` || '')
-  setCookie('is_support_hotdish', porderInfo.is_support_hotdish || '0')
-  setCookie('NEW_SALES_ORG_ID', porderInfo.sales_org_id || '')
-  setCookie('is_shipping_order_mobile', isShippingOrder || '')
-  setCookie('shipping_free_fee', porderInfo.shipping_free_fee || '')
-  setCookie('shipping_fee', porderInfo.shipping_fee || '0')
-  setCookie('pantry_free_fee', porderInfo.pantry_free_fee || '0')
-  setCookie('pantry_fee', porderInfo.pantry_shipping_fee || '0')
-  setCookie('order_token', porderInfo.token)
-  setCookie('pre_order_id', porderInfo.id)
+  setCookie(response, 'NEW_ZIP_CITY', porderInfo.addr_city || '')
+  setCookie(response, 'NEW_ZIP_CODE', zipcode || '')
+  setCookie(response, 'DELIVERY_DATE', porderInfo.delivery_pickup_date || '')
+  setCookie(response, 'is_change_ship_area', `${isChangeShipArea}` || '')
+  setCookie(response, 'is_change_delivery_area', `${isChangeDeliveryArea}` || '')
+  setCookie(response, 'is_support_hotdish', porderInfo.is_support_hotdish || '0')
+  setCookie(response, 'NEW_SALES_ORG_ID', porderInfo.sales_org_id || '')
+  setCookie(response, 'is_shipping_order_mobile', isShippingOrder || '')
+  setCookie(response, 'shipping_free_fee', porderInfo.shipping_free_fee || '')
+  setCookie(response, 'shipping_fee', porderInfo.shipping_fee || '0')
+  setCookie(response, 'pantry_free_fee', porderInfo.pantry_free_fee || '0')
+  setCookie(response, 'pantry_fee', porderInfo.pantry_shipping_fee || '0')
+  setCookie(response, 'order_token', porderInfo.token)
+  setCookie(response, 'pre_order_id', porderInfo.id)
 
-  setCookie('is_mof', isMof)
-  setCookie('is_change_mof', `${+isChangeMof}`)
-  setCookie('deal_id', porderInfo.deal_id)
-  setCookie('is_support_change_date', porderInfo.is_support_change_date ? '1' : '0')
+  setCookie(response, 'is_mof', isMof)
+  setCookie(response, 'is_change_mof', `${+isChangeMof}`)
+  setCookie(response, 'deal_id', porderInfo.deal_id)
+  setCookie(response, 'is_support_change_date', porderInfo.is_support_change_date ? '1' : '0')
   setCookie(
+    response,
     'select_address',
     `${porderInfo.address || ''}|${porderInfo.addr_firstname || ''}|${porderInfo.addr_lastname || ''}|${porderInfo.email || ''}|${
       porderInfo.phone || ''

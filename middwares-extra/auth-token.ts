@@ -5,6 +5,7 @@ import { getValueFromReqHeaders, isWeixinBrowser } from '~/utils/req-headers'
 import { minimatch } from 'minimatch'
 import { LANGUAGE_REGULAR } from '~/constants'
 import { buildFullUrl } from '~/utils/url'
+import { callApi } from '~/utils/axios'
 
 const SHORT_TOKEN_REDIRECT_MAP = {
   '/product/*/{0..9}*': () => {
@@ -38,38 +39,32 @@ function redirectToPhp(req: NextRequest, res: NextResponse) {
 }
 
 function generateToken() {
-  return fetch(`/ec/customer/login/token/generate`, {
+  return callApi(`/ec/customer/login/token/generate`, {
     method: 'GET',
-  }).then((res) => {
-    return res
-      .json()
-      .then((data) => {
-        const { token } = data
-        return token
-      })
-      .catch((err) => {
-        console.log('generateToken', err)
-      })
   })
+    .then((data) => {
+      const { token } = data
+      return token
+    })
+    .catch((e) => {
+      console.log('generateToken error', e)
+    })
 }
 
 function refreshToken(oldToken: string, request: NextRequest) {
-  return fetch('/ec/customer/login/token/refresh', {
+  return callApi('/ec/customer/login/token/refresh', {
     method: 'POST',
     headers: {
       ...request.headers,
     },
-  }).then((res) => {
-    return res
-      .json()
-      .then((data) => {
-        const { token } = data
-        return token ? token : oldToken
-      })
-      .catch((err) => {
-        console.log('refreshToken', err)
-      })
   })
+    .then((data) => {
+      const { token } = data
+      return token ? token : oldToken
+    })
+    .catch((e) => {
+      console.log('refreshToken error', e)
+    })
 }
 
 export default async function authTokenMiddware(request: NextRequest, response: NextResponse) {
@@ -77,7 +72,7 @@ export default async function authTokenMiddware(request: NextRequest, response: 
     getValueFromReqHeaders(request, 'weee-token') ||
     getValueFromReqHeaders(request, 'preorder_token') ||
     getValueFromReqHeaders(request, 'weee_token') ||
-    getCookie('auth_token')
+    getCookie(response, 'auth_token')
 
   if (authToken && `${authToken}`.includes('.') === false && redirectToPhp(request, response)) {
     return
@@ -92,9 +87,9 @@ export default async function authTokenMiddware(request: NextRequest, response: 
         return minimatch(request.url, `${LANGUAGE_REGULAR}${key}`) || minimatch(request.url, key)
       }) || false
 
-    let isWechatLogin = getCookie('is_wechat_login')
+    let isWechatLogin = getCookie(response, 'is_wechat_login')
     if (isAutoInWechat && !isWechatLogin) {
-      setCookie('is_wechat_login', '1')
+      setCookie(response, 'is_wechat_login', '1')
       NextResponse.redirect(buildFullUrl(`/account/login/wechat?redirect_url=${encodeURIComponent(request.url)}`), 302)
       // res.redirect(
       //   302,
@@ -119,7 +114,7 @@ export default async function authTokenMiddware(request: NextRequest, response: 
   const time = new Date().getTime() / 1000
   const isExpired = expireTime < time
   const isRefesh = expireTime - time < 15 * 24 * 60 * 60
-  setCookie('IS_LOGIN', parseToken.is_login ? '1' : '0')
+  setCookie(response, 'IS_LOGIN', parseToken.is_login ? '1' : '0')
   //token过期，重新生成匿名token
   if (isExpired) {
     try {
@@ -131,16 +126,17 @@ export default async function authTokenMiddware(request: NextRequest, response: 
       console.log(error)
     }
   }
-  console.log(authToken, '====authToken')
   //token在15天以内过期，刷新token
   if (!isExpired && isRefesh) {
     try {
       let refreshResult = await refreshToken(authToken as string, request)
-
       authToken = refreshResult
       parseToken = jwt.decode(authToken) || {}
     } catch (e) {
       console.log(e)
     }
   }
+  setCookie(response, 'auth_token', authToken as string)
+  setCookie(response, 'user_id', parseToken.is_login ? parseToken.user_id : '')
+  setCookie(response, 'temp_user_id', parseToken.user_id)
 }

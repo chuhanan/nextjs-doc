@@ -2,7 +2,10 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { i18n } from '~/constants'
 import createIntlMiddleware from 'next-intl/middleware'
+
 import middwareSessionToken from '~/middwares-extra/session-token'
+import middwareAuthToken from '~/middwares-extra/auth-token'
+import middwareZipcode from '~/middwares-extra/zipcode'
 
 export default async function middleware(request: NextRequest) {
   // Use the incoming request
@@ -26,6 +29,10 @@ export default async function middleware(request: NextRequest) {
   const response: NextResponse = handleI18nRouting(request)
 
   await middwareSessionToken(request, response)
+
+  await middwareAuthToken(request, response)
+
+  await middwareZipcode(request, response)
 
   // Alter the response
   response.headers.set('x-default-locale', defaultLocale)
