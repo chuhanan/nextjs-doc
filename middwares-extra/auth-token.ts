@@ -38,9 +38,15 @@ function redirectToPhp(req: NextRequest, res: NextResponse) {
   return false
 }
 
-function generateToken() {
+async function generateToken(req: NextRequest) {
   return callApi(`/ec/customer/login/token/generate`, {
     method: 'GET',
+    headers: {
+      // ...req.headers,
+      lang: 'en',
+      Platform: 'h5',
+      'app-version': null,
+    },
   })
     .then((data) => {
       const { token } = data
@@ -48,10 +54,11 @@ function generateToken() {
     })
     .catch((e) => {
       console.log('generateToken error', e)
+      return ''
     })
 }
 
-function refreshToken(oldToken: string, request: NextRequest) {
+async function refreshToken(oldToken: string, request: NextRequest) {
   return callApi('/ec/customer/login/token/refresh', {
     method: 'POST',
     headers: {
@@ -72,7 +79,7 @@ export default async function authTokenMiddware(request: NextRequest, response: 
     getValueFromReqHeaders(request, 'weee-token') ||
     getValueFromReqHeaders(request, 'preorder_token') ||
     getValueFromReqHeaders(request, 'weee_token') ||
-    getCookie(response, 'auth_token')
+    getCookie(request, 'auth_token')
 
   if (authToken && `${authToken}`.includes('.') === false && redirectToPhp(request, response)) {
     return
@@ -87,7 +94,7 @@ export default async function authTokenMiddware(request: NextRequest, response: 
         return minimatch(request.url, `${LANGUAGE_REGULAR}${key}`) || minimatch(request.url, key)
       }) || false
 
-    let isWechatLogin = getCookie(response, 'is_wechat_login')
+    let isWechatLogin = getCookie(request, 'is_wechat_login')
     if (isAutoInWechat && !isWechatLogin) {
       setCookie(response, 'is_wechat_login', '1')
       NextResponse.redirect(buildFullUrl(`/account/login/wechat?redirect_url=${encodeURIComponent(request.url)}`), 302)
@@ -101,7 +108,7 @@ export default async function authTokenMiddware(request: NextRequest, response: 
 
   if (!authToken) {
     try {
-      let generateResult = await generateToken()
+      let generateResult = await generateToken(request)
 
       authToken = generateResult
       parseToken = jwt.decode(authToken) || {}
@@ -118,7 +125,7 @@ export default async function authTokenMiddware(request: NextRequest, response: 
   //token过期，重新生成匿名token
   if (isExpired) {
     try {
-      let generateResult = await generateToken()
+      let generateResult = await generateToken(request)
 
       authToken = generateResult
       parseToken = jwt.decode(authToken) || {}

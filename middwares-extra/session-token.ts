@@ -24,9 +24,6 @@ async function generateSessionToken(request: NextRequest): Promise<string> {
   const source = new URL(url).searchParams.get('source') || ''
   return callApi(`/ec/tracking/session_id?source=${source}&url=${encodeURIComponent(url)}`, {
     method: 'GET',
-    headers: {
-      ...request.headers,
-    },
   }).then((data) => {
     const { weee_session_token } = data
     return weee_session_token
@@ -40,15 +37,15 @@ export default async function sessionTokenMiddware(request: NextRequest, respons
   } else {
     response.headers.set('x-session-token', '123456789')
   }
-  response.cookies.set('x-test', 'sdffdsfg')
   //app访问时，设置设备id到cookie
   const deviceId = getAppDeviceId(request)
   if (deviceId) {
     setCookie(response, 'deviceId', deviceId)
   }
   //检查weee_session_token是否存在，不存在则设置
-  let sessionToken = getWeeeSessionTokenFromHeaders(request) || getCookie(response, 'weee_session_token')
-  const bCookie = getCookie(response, 'b_cookie')
+  let sessionToken = getWeeeSessionTokenFromHeaders(request) || getCookie(request, 'weee_session_token')
+  console.log(sessionToken, 'sessionToken', request.cookies.get('weee_session_token')?.value)
+  const bCookie = getCookie(request, 'b_cookie')
   const isApp = isSayweeeApp(request)
   const source = new URL(request.url).searchParams.get('source') || ''
   if (!sessionToken || (!isApp && source)) {
@@ -61,5 +58,9 @@ export default async function sessionTokenMiddware(request: NextRequest, respons
   if (source && !isApp) {
     //
   }
-  return response
+  return {
+    deviceId,
+    sessionToken,
+    bCookie,
+  }
 }
