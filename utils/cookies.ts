@@ -3,13 +3,22 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 
-export const setCookie = async (response: NextResponse, name: string, value: string, options?) => {
-  response.cookies.set(name, value, options)
+export const setCookie = (name: string, value: string, response?: NextResponse, options?) => {
+  if (response) {
+    return response.cookies.set(name, value, options)
+  } else {
+    return cookies().set(name, value, options)
+  }
 }
 
-export const getCookie = (request: NextRequest, name: string) => {
-  return request.cookies.get(name)?.value || ''
+export const getCookie = (name: string, request?: NextRequest) => {
+  if (request) {
+    return request.cookies.get(name)?.value || ''
+  } else {
+    return cookies().get(name)?.value || ''
+  }
 }
 
 export const getShareData = (name: string, request: NextRequest, response: NextResponse) => {

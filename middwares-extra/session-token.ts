@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCookie, setCookie } from '~/utils/cookies'
-import { getAppDeviceId, getValueFromReqHeaders, getWeeeSessionTokenFromHeaders, isSayweeeApp, setValueToReqHeaders } from '~/utils/req-headers'
+import { getAppDeviceId, getValueFromReqHeaders, getWeeeSessionTokenFromHeaders, isSayweeeApp } from '~/utils/req-headers'
 import jwt from 'jsonwebtoken'
 import { callApi } from '~/utils/axios'
 
@@ -40,20 +40,19 @@ export default async function sessionTokenMiddware(request: NextRequest, respons
   //app访问时，设置设备id到cookie
   const deviceId = getAppDeviceId(request)
   if (deviceId) {
-    setCookie(response, 'deviceId', deviceId)
+    setCookie('deviceId', deviceId, response)
   }
   //检查weee_session_token是否存在，不存在则设置
-  let sessionToken = getWeeeSessionTokenFromHeaders(request) || getCookie(request, 'weee_session_token')
-  console.log(sessionToken, 'sessionToken', request.cookies.get('weee_session_token')?.value)
-  const bCookie = getCookie(request, 'b_cookie')
+  let sessionToken = getWeeeSessionTokenFromHeaders(request) || getCookie('weee_session_token', request)
+  const bCookie = getCookie('b_cookie', request)
   const isApp = isSayweeeApp(request)
   const source = new URL(request.url).searchParams.get('source') || ''
   if (!sessionToken || (!isApp && source)) {
     sessionToken = await generateSessionToken(request)
   }
-  setCookie(response, 'weee_session_token', sessionToken as string)
+  setCookie('weee_session_token', sessionToken as string, response)
   if (!bCookie) {
-    setCookie(response, 'b_cookie', sessionToken as string)
+    setCookie('b_cookie', sessionToken as string, response)
   }
   if (source && !isApp) {
     //

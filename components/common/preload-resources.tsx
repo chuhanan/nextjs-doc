@@ -1,4 +1,5 @@
 'use client'
+import { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
 export default function PreloadResources(props: { lang: string }) {
@@ -16,5 +17,18 @@ export default function PreloadResources(props: { lang: string }) {
   // <link rel="stylesheet" href={`https://img01.weeecdn.net/static/font-face-css/${lang}-845175b2.css`} />
   // <link rel="preload" href={`https://img01.weeecdn.net/static/font-enki-css/${lang}-c65aeff5.css`} as="style" />
   // <link rel="stylesheet" href={`https://img01.weeecdn.net/static/font-enki-css/${lang}-c65aeff5.css`} />
+
+  useEffect(() => {
+    const loadFastClick = async () => {
+      const fastClick = await import('fastclick')
+      fastClick.default.attach(document.body)
+      fastClick.default.prototype.focus = function (targetElement) {
+        targetElement.focus()
+      }
+    }
+
+    loadFastClick()
+  }, [])
+
   return <></>
 }
