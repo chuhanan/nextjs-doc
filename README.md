@@ -54,16 +54,74 @@ npx prisma studio
 
 - `src` 和 `app dir` 能否混用
   - 配置互斥
-- 国际化方案
+- 国际化方案 适配 app 目录
+  next-intl 可行
 
-  - nextjs 自带的
-    https://github.com/vercel/next.js/blob/canary/examples/app-dir-i18n-routing/i18n-config.ts demo 地址
-    缺点: 功能不全 少了 <Trans> 等格式化
-  - next-translate
-    老方案, 支持`nextjs 最新版` 支持`app dir`可以节省服务端资源, 可以直接迁移之前的组件
-    缺点: 第三方
+  - 解决不在客户端加载所有多语言
+  - 在`client`端动态修改国际化语言的方案
+  - `router.push` 需要传入语言位(封装), `location` 跳转不需要
+  - 解决`nextjs`默认语言位时会去被掉的问题
+    next-translate 报错 不支持
+    react-intl rsc 不支持
 
 - 使用并行路由拆分不同设备的组件
   - `@mobile` 和 `@pc`
   - `layout` 放在外面, 不可以使用 `html` 和 `body` 等标签
   - 如果加载了 `@pc` 的组件 `@mobile` 的服务端代码会执行, 但是其中的的 `client` 端组件不会加载, 达到了资源拆分的效果
+
+src 和 app 目录共存
+
+- 文件互斥 src 模式需要将 /components /lib 都放在 src 里面
+- 配置不能共用 next-translate 和 next-intl 配置
+
+enki 配置迁移
+没有\_app 文件, 使用 ReactDOM.reload api 可以实现 `preload`, 但是没有方案去实现 `<link src={xxx.{lang}.css}>`
+
+迁移中间件
+cookies api 更新 进行总
+
+layout 独立 header 上标签策略和旧版不一样, 会直接影响分享 fb 等功能
+[参考链接](https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadata-fields)
+
+### 暂时挂起的 pdp 功能
+
+1. seo 如何优雅处理
+
+```js
+const ProductDetailSEO: React.FC<Props> = ({ product, post, path }) => {
+  return (
+    <Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: `{
+              "@context": "http://schema.org",
+              "@type": "Product",
+              "name": "${product?.name?.replace(/"/g, '') || ''}",
+              "image": ${JSON.stringify(product?.img_urls)},
+              "description": "${
+                product?.description?.trim()
+                  ? product.description.trim().replace(/"|\n|\r|\t/g, '')
+                  : product?.name?.replace(/"/g, '') || ''
+              }",
+              "sku": "${product?.id}",
+              "mpn": "${product?.id}",
+              "brand": {
+                  "@type": "Brand",
+                  "name": "Weee"
+              },
+              ${
+                post?.total
+
+```
+
+2. 不同用户访问 pdp 的拆分, 如 `robot` `new user` `old user` `vip user` 等
+
+### 项目中的问题
+
+页面状态保持方案
+
+- swr todo
+- 埋点从客户端触发
+- 无法 `import 'swiper/swiper.min.css'`
+- getCroppedImageUrl

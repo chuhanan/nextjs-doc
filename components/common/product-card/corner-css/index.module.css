@@ -1,0 +1,27 @@
+.shipsFrom {
+  font-weight: 400;
+}
+
+.shipsFrom span {
+  line-height: 13px !important;
+}
+.shipsFrom a {
+  position: relative;
+  line-height: 17px !important;
+  text-decoration: none !important;
+  display: inline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0 2px;
+}
+.shipsFrom a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 16px;
+  height: 1px;
+  width: 100%;
+  background-color: #666;
+}

@@ -2,13 +2,18 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { i18n } from '~/constants'
 import createIntlMiddleware from 'next-intl/middleware'
+
 import middwareSessionToken from '~/middwares-extra/session-token'
+import middwareAuthToken from '~/middwares-extra/auth-token'
+import middwareZipcode from '~/middwares-extra/zipcode'
+import { getLangFromAcceptLanguage, getLangFromCookie, getLangFromReqHeaders, getLangFromUrl } from './utils/lang'
 
 export default async function middleware(request: NextRequest) {
-  // Use the incoming request
-  const defaultLocale = request.headers.get('x-default-locale') || 'en'
-
-  // Create and call the next-intl middleware
+  const defaultLocale =
+    getLangFromCookie(request) || getLangFromUrl(request) || getLangFromReqHeaders(request) || getLangFromAcceptLanguage(request) || 'en'
+  //后端接口需要lang, 但是要兼容 'zht' -> 'zh-Hant'
+  request.headers.set('lang', defaultLocale)
+  //next-intl 处理国际化
   const handleI18nRouting = createIntlMiddleware({
     // A list of all locales that are supported
     locales: i18n.locales,
@@ -24,16 +29,18 @@ export default async function middleware(request: NextRequest) {
     ],
   })
   const response: NextResponse = handleI18nRouting(request)
+  console.time('middleware')
+  await middwareSessionToken(request, response)
 
-  middwareSessionToken(request, response)
+  await middwareAuthToken(request, response)
 
-  // Alter the response
-  response.headers.set('x-default-locale', defaultLocale)
+  await middwareZipcode(request, response)
+  console.timeEnd('middleware')
 
   return response
 }
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|enki).*)'],
 }

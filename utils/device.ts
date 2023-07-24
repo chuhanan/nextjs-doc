@@ -1,4 +1,4 @@
-export const isDevice = (ua: string, type: 'h5' | 'pc') => {
+export const isDevice = (ua: string | null, type: 'h5' | 'pc') => {
   if (type === 'h5') {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
   }

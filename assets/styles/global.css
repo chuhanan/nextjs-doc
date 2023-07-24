@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .skeleton {
+    background-image: linear-gradient(-45deg, #f3f3f3 25%, #fff 45%, #f3f3f3 65%);
+    background-repeat: no-repeat;
+    background-size: 400% 100%;
+    animation: skeleton-loading 1.2s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-loading {
+    0% {
+      background-position: 100% 50%;
+    }
+    to {
+      background-position: 0 50%;
+    }
+  }
+
+  .addCartToLeft {
+    width: 96px;
+    animation: slideToLeft 200ms ease-in-out;
+  }
+
+  .addCartToRight {
+    width: 34px;
+    animation: slideToRight 200ms ease-in-out;
+  }
+
+  .rotateLeft {
+    transform: rotate(0deg);
+    animation: btnRotateLeft 200ms ease-in-out;
+  }
+
+  .rotateRight {
+    transform: rotate(90deg);
+    animation: btnRotateRight 200ms ease-in-out;
+  }
+
+  @keyframes slideToLeft {
+    0% {
+      width: 34px;
+    }
+    100% {
+      width: 96px;
+    }
+  }
+
+  @keyframes slideToRight {
+    0% {
+      width: 96px;
+    }
+    100% {
+      width: 34px;
+    }
+  }
+
+  @keyframes btnRotateLeft {
+    0% {
+      transform: rotate(90deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes btnRotateRight {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+@layer utilities {
+  .product-card-btn-shadow {
+    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.03), 0px 7px 20px rgba(0, 0, 0, 0.06);
+  }
+  .global-filter-box-shadow {
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.02), 0px 3px 8px rgba(0, 0, 0, 0.09);
+  }
+  .checkout-btn-shadow {
+    box-shadow: 0px 7px 20px 0px rgba(0, 0, 0, 0.11), 0px 0px 7px 0px rgba(0, 0, 0, 0.1);
+  }
+}
+
+html {
+  height: 100%;
+  margin: 0 auto;
+  -ms-touch-action: manipulation; /* IE10  */
+  touch-action: manipulation; /* IE11+ */
+
+  /* body {
+    &.en,
+    &.es {
+      font-family: Poppins, -apple-system, BlinkMacSystemFont, Roboto, Seogoe UI, Ubuntu, sans-serif;
+    }
+    &.zh,
+    &.zht {
+      font-family: Noto Sans SC, Poppins, -apple-system, BlinkMacSystemFont, Roboto, Seogoe UI, Ubuntu, sans-serif;
+    }
+    &.ko {
+      font-family: Noto Sans KR, Poppins, -apple-system, BlinkMacSystemFont, Roboto, Seogoe UI, Ubuntu, sans-serif;
+    }
+    &.ja {
+      font-family: Noto Sans JP, Poppins, -apple-system, BlinkMacSystemFont, Roboto, Seogoe UI, Ubuntu, sans-serif;
+    }
+    &.vi {
+      font-family: Be Vietnam Pro, Poppins, -apple-system, BlinkMacSystemFont, Roboto, Seogoe UI, Ubuntu, sans-serif;
+    }
+    color: #333;
+    font-size: 12px;
+    height: 100%;
+    -webkit-tap-highlight-color: transparent;
+
+    &.body-fixed {
+      position: fixed;
+      width: 100%;
+    }
+  } */
+}
+
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 30px;
+  background-color: #bbb;
+  border-radius: 3px;
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+
+input::-webkit-input-placeholder {
+  color: var(--ecm-ada-grey-dark) !important;
+}
+input::-moz-input-placeholder {
+  color: var(--ecm-ada-grey-dark) !important;
+}
+input::-ms-input-placeholder {
+  color: var(--ecm-ada-grey-dark) !important;
+}
+
+input:-internal-autofill-selected {
+  background-color: var(--ecm-white) !important;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover {
+  -webkit-text-fill-color: var(--ecm-grey_dark);
+  -webkit-box-shadow: 0 0 0px 1000px var(--ecm-white) inset;
+}
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ecm-grey05);
+  -webkit-box-shadow: 0 0 0px 1000px var(--ecm-white) inset;
+}
+
+input,
+textarea {
+  appearance: none;
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari 和 Chrome */
+}
+
+*,
+*::before,
+*::after {
+  border-width: 0;
+}
