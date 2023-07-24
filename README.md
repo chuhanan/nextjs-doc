@@ -75,7 +75,7 @@ src 和 app 目录共存
 - 配置不能共用 next-translate 和 next-intl 配置
 
 enki 配置迁移
-没有\_app 文件, 使用 ReactDOM.reload api 可以实现
+没有\_app 文件, 使用 ReactDOM.reload api 可以实现 `preload`, 但是没有方案去实现 `<link src={xxx.{lang}.css}>`
 
 迁移中间件
 cookies api 更新 进行总
@@ -122,3 +122,6 @@ const ProductDetailSEO: React.FC<Props> = ({ product, post, path }) => {
 页面状态保持方案
 
 - swr todo
+- 埋点从客户端触发
+- 无法 `import 'swiper/swiper.min.css'`
+- getCroppedImageUrl

@@ -9,9 +9,10 @@ interface IProps {
 
 export default function Picture(props: IProps) {
   const { className, product } = props
-  if (!product) {
-    return null
-  }
+  console.log(product?.media_urls, 'product?.media_urls')
+  // if (!product) {
+  //   return null
+  // }
   return (
     <Swiper
       className={twMerge(
@@ -28,9 +29,11 @@ export default function Picture(props: IProps) {
       slidesPerView="auto"
     >
       {product?.media_urls?.map((item, index) => {
-        ;<SwiperSlide key={`filter-item-${index}`}>
-          <img alt="Weee! - Groceries Delivered" className={twMerge('block w-screen h-[100vw] max-w-[750px] max-h-[750px]')} src={item.url} />
-        </SwiperSlide>
+        return (
+          <SwiperSlide key={`filter-item-${index}`}>
+            <img alt="Weee! - Groceries Delivered" className={twMerge('block w-screen h-[100vw] max-w-[750px] max-h-[750px]')} src={item.url} />
+          </SwiperSlide>
+        )
       })}
     </Swiper>
   )

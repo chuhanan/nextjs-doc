@@ -9,6 +9,7 @@ const nextConfig = {
     domains: ['pbs.twimg.com'],
   },
   experimental: {
+    esmExternals: true,
     serverActions: true,
   },
 }

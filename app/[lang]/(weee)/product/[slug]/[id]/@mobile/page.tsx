@@ -8,6 +8,11 @@ import { Back } from '~/components/common/back'
 import MiniCart from '~/components/common/mini-cart'
 import Picture from '~/components/biz/pdp/picture'
 import Img from '~/components/common/img'
+import BodyTag from '~/components/biz/pdp/body-tag'
+import VipFreeTrialBanner from '~/components/biz/pdp/vip-free-trial-banner'
+import BodyVendorInfo from '~/components/biz/pdp/body-vendor-info'
+import ActivityList from '~/components/biz/pdp/activity-list'
+import ProductSectionsServer from '~/components/biz/pdp/product-sections-server'
 
 interface IProductPageProps {
   params: {
@@ -24,7 +29,7 @@ export default async function MobileProductPage({ params, searchParams }: IProdu
     'User-Agent': headers().get('user-agent'),
     Platform: headers().get('platform') || 'h5',
     'b-cookie': getCookie('b_cookie') || '',
-    Authorization: getCookie('auth_token') || '',
+    Authorization: `Bearer ${getCookie('auth_token')}`,
     lang: locale,
     'weee-session-token': getCookie('weee_session_token') || '',
     'Content-Type': 'application/json',
@@ -58,9 +63,9 @@ export default async function MobileProductPage({ params, searchParams }: IProdu
       },
     }),
   ])
-  console.log(productDetail, 'productDetail')
-  console.log(seoInfo, 'seoInfo')
-  console.log(postInfo, 'postInfo')
+  // console.log(productDetail, 'productDetail')
+  // console.log(seoInfo, 'seoInfo')
+  // console.log(postInfo, 'postInfo')
 
   const header = (
     <div className="w-full h-full bg-surface-1-bg-idle flex items-center justify-between">
@@ -80,7 +85,14 @@ export default async function MobileProductPage({ params, searchParams }: IProdu
 
   return (
     <Layout header={header}>
-      <Picture product={productDetail} />
+      <Picture product={productDetail?.product} />
+      <BodyTag product={productDetail?.product} />
+      <VipFreeTrialBanner product={productDetail?.product} />
+      <BodyVendorInfo product={productDetail?.product} />
+      <ActivityList product={productDetail?.product} />
+      {/* vip_free_trial_banner bannerCode() */}
+
+      <ProductSectionsServer product={productDetail?.product} />
       <div>mobile</div>
       <ClientChild />
     </Layout>
