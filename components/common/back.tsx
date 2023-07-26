@@ -19,7 +19,9 @@ export const defaultBack = (router, appBackUrl?, h5BackUrl?) => {
   //   history.back();
   //   return;
   // }
-
+  if (1) {
+    return router.back()
+  }
   if (referer && !referer.includes(currentPage)) {
     if (referer.includes('sayweee.')) {
       return router.back()

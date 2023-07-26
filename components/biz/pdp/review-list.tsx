@@ -8,15 +8,14 @@ import ReviewCard from '~/components/common/review-card'
 import { useTranslations } from 'next-intl'
 import Img from '~/components/common/img'
 type IProps = {
-  product: any
   id: number
   post: ObjectType
 }
-const ReviewList: FC<IProps> = ({ product, post, id }) => {
+const ReviewList: FC<IProps> = ({ post, id }) => {
   const t = useTranslations('ReviewList')
 
   //landing 状态和正常装填下列表的位置有所不同, 提取成方法公用
-  let name = (product?.name?.replace(product?.unit_info || '', '') || '').trim()
+  // let name = (product?.name?.replace(product?.unit_info || '', '') || '').trim()
   if ((post?.list?.length || 0) === 0 && !post?.show_entrance) return null
 
   return (

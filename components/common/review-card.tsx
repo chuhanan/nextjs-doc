@@ -1,7 +1,6 @@
-'use client'
 import dayjs from 'dayjs'
 import Link from 'next/link'
-import { getCookie } from '~/utils/cookie-client'
+// import { getCookie } from '~/utils/cookie-client'
 import Img from './img'
 import { useTranslations } from 'next-intl'
 
@@ -31,7 +30,7 @@ export const getLocaleDateStr = (timestamp: number, lang: string, format?: strin
 
 export default function ReviewCard({ data }: Props) {
   const t = useTranslations('ReviewList')
-  const userId = getCookie('user_id') || ''
+  const userId = '' //getCookie('user_id') || ''
   const lang = 'zh' //getCookie('site_lang') || 'en'
 
   return (

@@ -125,3 +125,15 @@ const ProductDetailSEO: React.FC<Props> = ({ product, post, path }) => {
 - 埋点从客户端触发
 - 无法 `import 'swiper/swiper.min.css'`
 - getCroppedImageUrl 未适配需要删减逻辑
+
+### 最佳实践
+
+- 服务端数据尽可能小的传输
+
+如果直接将接口的数据直接传入页面里面的多个使用到的组件, 但是又不需要全部数据, 尽量保证数据最小化, 减少返回的`html` 的体积,
+`nextjs`会在`<head>`中将数据注入`<script>`中, 完成数据的传递
+
+- 在使用服务端组件时页面状态天然保持
+
+获取的数据在服务端, 切换页面再返回时, 页面之前的操作状态不会重置, 保持了之前的状态, 但要注意是否对服务器造成压力, 需要后续验证
+`nextjs` 封装了原生的 `fetch api` 并且支持更灵活的接口缓存和更新

@@ -39,7 +39,7 @@ const ImageLazy: FC<ViewProps> = React.forwardRef(({ initialLoad = false, viewOp
   return (
     <>
       {!complete && cloneElement(placeholder, { ref })}
-      <Img {...rest} className={twMerge(twMerge(className, !complete && 'hidden'))} src={loaded ? src : ''} />
+      <Img {...rest} className={twMerge(className, !complete && 'hidden')} src={loaded ? src : ''} />
     </>
   )
 })

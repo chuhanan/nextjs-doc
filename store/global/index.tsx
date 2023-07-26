@@ -2,6 +2,8 @@ import React, { createContext, useContext, useReducer } from 'react'
 
 import { reducer, initialState, InitialState } from './reducer'
 
+import ACTIONS from './actions'
+
 const GlobalContext = createContext<{ [key: string]: any }>(initialState)
 
 export const GlobalProvider = ({ children, data }) => {
@@ -9,18 +11,16 @@ export const GlobalProvider = ({ children, data }) => {
   return <GlobalContext.Provider value={{ store, dispatch }}>{children}</GlobalContext.Provider>
 }
 
-type ActionType = {
-  type: string
-  payload: Promise<any> | any
-  callback?: (errorInfo?: any, responseData?: any) => void
+export interface IGlobalState extends InitialState {
+  setCartData: (data: any) => void
 }
 
-type UseHomepageType = {
-  store: InitialState
-  dispatch: (action: ActionType) => void
-  [key: string]: any
-}
-
-export default function useGlobal(): UseHomepageType {
-  return useContext(GlobalContext) as UseHomepageType
+export default function useGlobal(): IGlobalState {
+  const { dispatch, ...store } = useContext(GlobalContext)
+  return {
+    ...store.store,
+    setCartData: (data) => {
+      dispatch({ type: ACTIONS.SET_CART_DATA, payload: data })
+    },
+  }
 }

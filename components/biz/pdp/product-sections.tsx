@@ -162,7 +162,6 @@ const ProductSections: FC<IProps> = ({ product }) => {
       'Content-Type': 'application/json',
     }
     const res = await callApi(`/ec/item/v2/items/${product?.id}/modules`, {
-      log: true,
       method: 'GET',
       body: {
         limit: 10,

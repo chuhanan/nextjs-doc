@@ -2,10 +2,12 @@ import ACTIONS from './actions'
 
 export interface InitialState {
   global: any
+  cart: any
 }
 
 export const initialState = {
   global: {},
+  cart: {},
 }
 
 export const reducer = (state = initialState, action) => {
@@ -15,7 +17,11 @@ export const reducer = (state = initialState, action) => {
         ...state,
         global: action.payload,
       }
-
+    case ACTIONS.SET_CART_DATA:
+      return {
+        ...state,
+        cart: action.payload,
+      }
     default:
       return state
   }
