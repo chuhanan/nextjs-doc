@@ -1,6 +1,7 @@
 'use client'
 
 import { getCroppedImageUrl } from '~/components/common/cropped-image/packages/utils/getCroppedImageUrl'
+import Img from '~/components/common/img'
 
 export default function VipFreeTrialBanner(props) {
   const { product } = props
@@ -12,7 +13,7 @@ export default function VipFreeTrialBanner(props) {
           product?.vip_free_trial_banner_link && (window.location.href = product.vip_free_trial_banner_link)
         }}
       >
-        <img
+        <Img
           src={getCroppedImageUrl(product?.vip_free_trial_banner, {
             renderWidth: 375,
             devicePixelRatio: 2,

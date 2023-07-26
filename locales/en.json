@@ -185,6 +185,14 @@
   "Copyright": {
     "Text": "© {year} - Weee, Inc."
   },
+  "ReviewList": {
+    "account_reviews": "Reviews",
+    "more": "View More",
+  "common_featured": "Featured"
+  },
+  "ProductCard": {
+    "pdp_same_brand": "Seller Recommended"
+  },
   "Common": {
     "system_error": "System is busy please try again later",
   "max_order_quantity_limit": "Qty Limit Reached",
@@ -267,7 +275,6 @@
   "common_details": "Details",
   "dietary_needs": "Dietary Needs:",
   "detail_description": "Description",
-  "account_reviews": "Reviews",
   "sold_count": "{{soldCount}} Sold",
   "remaining_count": "{{remainCount}} Left",
   "btn_view": "View",

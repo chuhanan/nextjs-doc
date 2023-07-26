@@ -1,4 +1,5 @@
 import { twMerge } from 'tailwind-merge'
+import Img from '../img'
 
 enum TagKey {
   TAG_KEY_KILL_DEAL = 'kill_deal',
@@ -25,7 +26,7 @@ export default function PointTag(props: Props) {
             )}
             style={{ backgroundColor: tag?.tag_color, color: tag?.tag_font_color }}
           >
-            {!!tag?.tag_icon_url && <img style={{ width: '16px', height: '16px' }} src={tag?.tag_icon_url} />}
+            {!!tag?.tag_icon_url && <Img style={{ width: '16px', height: '16px' }} src={tag?.tag_icon_url} />}
             <span
               className="flex-1 leading-[initial] overflow-hidden text-ellipsis whitespace-nowrap"
               dangerouslySetInnerHTML={{ __html: tag?.tag_name }}

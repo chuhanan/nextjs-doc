@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { i18n } from '~/constants'
 import createIntlMiddleware from 'next-intl/middleware'
-
 import middwareSessionToken from '~/middwares-extra/session-token'
 import middwareAuthToken from '~/middwares-extra/auth-token'
 import middwareZipcode from '~/middwares-extra/zipcode'
@@ -43,4 +42,9 @@ export default async function middleware(request: NextRequest) {
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico|enki).*)'],
+  runtime: 'experimental-edge',
+  unstable_allowDynamic: [
+    // '/lib/utilities.js', // allows a single file
+    '/node_modules/lodash/**', // use a glob to allow anything in the function-bind 3rd party module
+  ],
 }

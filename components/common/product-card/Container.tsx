@@ -85,7 +85,7 @@ const ProductContainer: React.FC<Partial<any>> = (props) => {
       to: buildUrlWithOrigin(`/product/${data?.slug ? data?.slug : `weee/${data?.id}`}` + convertObjectToUrlParams(linkParams)),
       reload: reload,
     }
-  }, [data, addCartParams?.source, JSON.stringify(linkParams)])
+  }, [data, addCartParams?.source, JSON.stringify(linkParams), isInUpsell, link, linkParams, transformLink])
 
   const cls = twMerge(
     'w-full flex flex-col justify-between relative bg-white overflow-hidden rounded-[10px]',

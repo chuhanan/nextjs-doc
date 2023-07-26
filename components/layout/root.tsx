@@ -1,5 +1,6 @@
 import PreloadResources from '~/components/common/preload-resources'
 import LazyloadScript from '../common/lazyload-scripts'
+import { cookies } from 'next/headers'
 import '~/assets/styles/global.css'
 import '~/assets/iconfont/iconfont.css'
 
@@ -19,6 +20,11 @@ export async function generateMetadata({ params }) {
 
 export default function BaseLayout(props: IRootLayoutProps) {
   const { lang, children, extraHeader } = props
+  const cookieList = cookies()
+  const globalCookie = {}
+  Object.keys(cookieList).forEach((key) => {
+    globalCookie[key] = cookieList[key]
+  })
   return (
     <>
       <PreloadResources lang={lang} />

@@ -13,6 +13,7 @@ import VipFreeTrialBanner from '~/components/biz/pdp/vip-free-trial-banner'
 import BodyVendorInfo from '~/components/biz/pdp/body-vendor-info'
 import ActivityList from '~/components/biz/pdp/activity-list'
 import ProductSectionsServer from '~/components/biz/pdp/product-sections-server'
+import ReviewListServer from '~/components/biz/pdp/review-list-server'
 
 interface IProductPageProps {
   params: {
@@ -91,8 +92,14 @@ export default async function MobileProductPage({ params, searchParams }: IProdu
       <BodyVendorInfo product={productDetail?.product} />
       <ActivityList product={productDetail?.product} />
       {/* vip_free_trial_banner bannerCode() */}
+      <ReviewListServer product={productDetail?.product} id={+params.id} post={postInfo} />
+      {/* <ProductSectionsServer product={productDetail?.product} /> */}
 
-      <ProductSectionsServer product={productDetail?.product} />
+      {productDetail?.product?.description_html && (
+        <div className="px-4 py-3">
+          <div dangerouslySetInnerHTML={{ __html: productDetail?.product?.description_html }}></div>
+        </div>
+      )}
       <div>mobile</div>
       <ClientChild />
     </Layout>

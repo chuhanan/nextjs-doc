@@ -124,4 +124,4 @@ const ProductDetailSEO: React.FC<Props> = ({ product, post, path }) => {
 - swr todo
 - 埋点从客户端触发
 - 无法 `import 'swiper/swiper.min.css'`
-- getCroppedImageUrl
+- getCroppedImageUrl 未适配需要删减逻辑

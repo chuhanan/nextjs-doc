@@ -2,6 +2,7 @@
 import React, { cloneElement, FC, ReactElement, JSXElementConstructor, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { IntersectionOptions, useInView } from 'react-intersection-observer'
 import { twMerge } from 'tailwind-merge'
+import Img from './img'
 
 type ViewProps = Partial<any> & {
   viewOptions?: IntersectionOptions
@@ -38,7 +39,7 @@ const ImageLazy: FC<ViewProps> = React.forwardRef(({ initialLoad = false, viewOp
   return (
     <>
       {!complete && cloneElement(placeholder, { ref })}
-      <img {...rest} className={twMerge(twMerge(className, !complete && 'hidden'))} src={loaded ? src : ''} />
+      <Img {...rest} className={twMerge(twMerge(className, !complete && 'hidden'))} src={loaded ? src : ''} />
     </>
   )
 })

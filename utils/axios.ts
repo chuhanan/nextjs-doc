@@ -1,7 +1,7 @@
 export const callApi = async (url, options) => {
   const { headers: oHeaders, method, log, ...rest } = options || {}
   const isGetMeghtod = method.toUpperCase() === 'GET'
-  let finalUrl = `${process.env.NEXT_PUBLIC_API_HOST}${url}`
+  let finalUrl = `${process.env.NEXT_PUBLIC_API_HOST || process.env.API_HOST}${url}`
   if (isGetMeghtod && options.body) {
     const params = Object.keys(options.body)
       .map((key) => {

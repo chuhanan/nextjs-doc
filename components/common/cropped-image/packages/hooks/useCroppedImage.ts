@@ -33,25 +33,22 @@ export const useCroppedImage: UseCroppedImage = (params) => {
     }
   }, [])
 
-  const getImageUrl: GetCroppedImageUrl = useCallback(
-    (originUrl, configs, options) => {
-      const config = getConfig(configs)
-      const cacheKey = generateKey({ originUrl, config, options })
-      const _options = prototypeToString(options) === ESTypes.string ? { reqHeaderAccept: options as string } : options
-      if (cacheKey && imgUrlMapRef.current[cacheKey]) return imgUrlMapRef.current[cacheKey]
-      const _imgUrl = getCroppedImageUrl(originUrl, config, options)
-      if ((config.format && config.format !== FORMAT_MAP.AUTO) || _options?.reqHeaderAccept) {
-        imgUrlMapRef.current[cacheKey] = _imgUrl
-        return _imgUrl
-      }
-      if (hasMounted) {
-        imgUrlMapRef.current[cacheKey] = _imgUrl
-        return _imgUrl
-      }
-      return placeholder ?? ''
-    },
-    [hasMounted],
-  )
+  const getImageUrl: GetCroppedImageUrl = (originUrl, configs, options) => {
+    const config = getConfig(configs)
+    const cacheKey = generateKey({ originUrl, config, options }) || ''
+    const _options = prototypeToString(options) === ESTypes.string ? { reqHeaderAccept: options as string } : options
+    if (cacheKey && imgUrlMapRef.current[cacheKey]) return imgUrlMapRef.current[cacheKey]
+    const _imgUrl = getCroppedImageUrl(originUrl, config, options)
+    if ((config.format && config.format !== FORMAT_MAP.AUTO) || _options?.reqHeaderAccept) {
+      imgUrlMapRef.current[cacheKey] = _imgUrl
+      return _imgUrl
+    }
+    if (hasMounted) {
+      imgUrlMapRef.current[cacheKey] = _imgUrl
+      return _imgUrl
+    }
+    return placeholder ?? ''
+  }
 
   return {
     getCroppedImageUrl: getImageUrl,

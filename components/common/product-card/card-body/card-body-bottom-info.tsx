@@ -46,7 +46,7 @@ const CardBodyBottomInfo: React.FC<Partial<any>> = (props) => {
       display2Items = [display2Items[0], <ShipsFrom key="ShipsFrom" {...props} className="max-w-full" />]
     }
     return display2Items
-  }, [showWeekly, showActivity, showLeft, data, showAllTags])
+  }, [showWeekly, showActivity, showLeft, data, showAllTags, cardType, productTag, props, showSoldBy, weekSoldCount])
 
   if (displayItems.length) {
     return <div className={twMerge('mt-1.5 flex flex-col justify-start items-start', className)}>{displayItems}</div>

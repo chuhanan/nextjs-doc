@@ -4,8 +4,9 @@ import Script from 'next/script'
 export default function LazyloadScript() {
   return (
     <>
-      <Script strategy="lazyOnload" src="https://www.googletagmanager.com/gtag/js?id=UA-56885317-2" />
+      <Script strategy="lazyOnload" id="googletagmanager" src="https://www.googletagmanager.com/gtag/js?id=UA-56885317-2" />
       <script
+        id="googletagmanager-2"
         dangerouslySetInnerHTML={{
           __html: `
         window.dataLayer = window.dataLayer || [];
@@ -23,6 +24,7 @@ export default function LazyloadScript() {
       />
       <Script
         strategy="lazyOnload"
+        id="googletagmanager-gtm"
         dangerouslySetInnerHTML={{
           __html: `
                   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -35,6 +37,7 @@ export default function LazyloadScript() {
       />
       {/* tracker */}
       <Script
+        id="tracker"
         // onLoad={initWeeeTracker}
         src={`${process.env.TRACK_SDK_HOST || process.env.NEXT_PUBLIC_TRACK_SDK_HOST}/data-tracking-sdk/biz-web/0.0.60/index.js`}
         strategy="lazyOnload"
