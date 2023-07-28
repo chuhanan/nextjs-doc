@@ -191,7 +191,10 @@
   "common_featured": "Featured"
   },
   "ProductCard": {
-    "pdp_same_brand": "Seller Recommended"
+    "pdp_same_brand": "Seller Recommended",
+    "remain_count": "Only {remainCount} Left",
+    "order_soon": "Only {quantity} left - order soon",
+    "sold_count": "{soldCount} sold"
   },
   "Common": {
     "system_error": "System is busy please try again later",

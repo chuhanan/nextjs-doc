@@ -18,68 +18,72 @@ type ViewProps = {
   onViewChange?: (inView: boolean) => void
 }
 
-const ViewportLoad: FC<ViewProps> = React.forwardRef(
-  (
-    { placeholder, children, className = '', initialLoad = false, viewOptions = {}, inViewTrackOnceCallBack, onViewChange, completeClassName = '' },
-    viewportRef,
-  ) => {
-    const { ref, inView } = useInView({
-      threshold: 0.2,
-      ...viewOptions,
-    })
-    const [loaded, setLoaded] = useState<boolean>(initialLoad)
-    const [complete, setComplete] = useState<boolean>(initialLoad)
-    const loadRef = useRef<boolean>(initialLoad)
-    const childrenRef = useRef<any>()
-    const refReported = useRef(false)
-    const timer = useRef<any>(null)
+const ViewportLoad: FC<ViewProps> = ({
+  placeholder,
+  children,
+  className = '',
+  initialLoad = false,
+  viewOptions = {},
+  inViewTrackOnceCallBack,
+  onViewChange,
+  completeClassName = '',
+}) => {
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    ...viewOptions,
+  })
+  const [loaded, setLoaded] = useState<boolean>(initialLoad)
+  const [complete, setComplete] = useState<boolean>(initialLoad)
+  const loadRef = useRef<boolean>(initialLoad)
+  const childrenRef = useRef<any>()
+  const refReported = useRef(false)
+  const timer = useRef<any>(null)
 
-    const handleComplate = useCallback(() => {
-      setComplete(true)
-    }, [])
+  const handleComplate = useCallback(() => {
+    setComplete(true)
+  }, [])
 
-    useEffect(() => {
-      onViewChange?.(inView)
-      if (loadRef.current) return
-      if (inView) {
-        setLoaded(true)
-        loadRef.current = true
+  useEffect(() => {
+    onViewChange?.(inView)
+    if (loadRef.current) return
+    if (inView) {
+      setLoaded(true)
+      loadRef.current = true
 
-        if (typeof inViewTrackOnceCallBack === 'function') {
-          if (refReported.current) return
-          timer.current = setTimeout(() => {
-            refReported.current = true
-            inViewTrackOnceCallBack()
-          }, 1000)
-        }
+      if (typeof inViewTrackOnceCallBack === 'function') {
+        if (refReported.current) return
+        timer.current = setTimeout(() => {
+          refReported.current = true
+          inViewTrackOnceCallBack()
+        }, 1000)
       }
-      return () => {
-        if (timer.current) {
-          clearTimeout(timer.current)
-        }
+    }
+    return () => {
+      if (timer.current) {
+        clearTimeout(timer.current)
       }
-    }, [inView])
+    }
+  }, [inView])
 
-    useEffect(() => {
-      if (loaded && !initialLoad) {
-        if (childrenRef.current) {
-          childrenRef.current.addEventListener('load', handleComplate)
-          childrenRef.current.addEventListener('error', handleComplate)
-          return
-        }
+  useEffect(() => {
+    if (loaded && !initialLoad) {
+      if (childrenRef.current) {
+        childrenRef.current.addEventListener('load', handleComplate)
+        childrenRef.current.addEventListener('error', handleComplate)
+        return
       }
-      return () => {
-        childrenRef.current?.removeEventListener('load', handleComplate)
-        childrenRef.current?.removeEventListener('error', handleComplate)
-      }
-    }, [loaded, initialLoad])
+    }
+    return () => {
+      childrenRef.current?.removeEventListener('load', handleComplate)
+      childrenRef.current?.removeEventListener('error', handleComplate)
+    }
+  }, [loaded, initialLoad])
 
-    return (
-      <span ref={ref} className={twMerge(!complete && className, !!complete && completeClassName)}>
-        {!loaded ? placeholder : cloneElement(children as ReactElement, { ref: childrenRef })}
-      </span>
-    )
-  },
-)
+  return (
+    <span ref={ref} className={twMerge(!complete && className, !!complete && completeClassName)}>
+      {!loaded ? placeholder : cloneElement(children as ReactElement, { ref: childrenRef })}
+    </span>
+  )
+}
 
 export { ViewportLoad }

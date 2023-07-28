@@ -1,5 +1,6 @@
+'use client'
 import Script from 'next/script'
-// import { initWeeeTracker } from '~/components/tracker'
+import { initWeeeTracker } from '~/utils/tracker'
 
 export default function LazyloadScript() {
   return (
@@ -38,7 +39,7 @@ export default function LazyloadScript() {
       {/* tracker */}
       <Script
         id="tracker"
-        // onLoad={initWeeeTracker}
+        onLoad={initWeeeTracker}
         src={`${process.env.TRACK_SDK_HOST || process.env.NEXT_PUBLIC_TRACK_SDK_HOST}/data-tracking-sdk/biz-web/0.0.60/index.js`}
         strategy="lazyOnload"
       />

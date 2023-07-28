@@ -1,10 +1,11 @@
 'use client'
 
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect, useRef } from 'react'
 import Header from '~/components/common/header'
 import { twMerge } from 'tailwind-merge'
 import useGlobal, { GlobalProvider } from '~/store/global'
 import DataProvider from './data-provider'
+import useSticky from '~/hooks/useSticky'
 export interface Props {
   className?: string
   headerWrapClassName?: string
@@ -56,15 +57,13 @@ function LayoutInner(props: Props) {
     prefetchApiList,
     ...rest
   } = props
-  const { cart, setCartData } = useGlobal()
-  // const headerRef = useRef(null)
-  console.log(cart, 'cart')
-  const { custom = false, targetRef, ...others } = props.stickyParams || {}
+  const headerRef = useRef(null)
+  const { custom = false, targetRef = headerRef, ...others } = props.stickyParams || {}
 
-  // const { eleRef } = useSticky({
-  //   targetRef,
-  //   ...others,
-  // })
+  const { eleRef } = useSticky({
+    targetRef,
+    ...others,
+  })
 
   // const [statusBarHeight, setStatusBarHeight] = useState(appStatusBarHeight)
 
@@ -84,7 +83,7 @@ function LayoutInner(props: Props) {
             position: '-webkit-sticky',
           }}
           id="layout-header"
-          // ref={headerRef}
+          ref={headerRef}
         >
           {/* {statusBarHeight > 0 && <div style={{ backgroundColor: statusBarColor }} />} */}
           {topNode}
@@ -104,7 +103,7 @@ function LayoutInner(props: Props) {
         </div>
         {!!children && (
           <div className={contentClassName} role="content">
-            {/* {!custom && <div ref={eleRef} />} */}
+            {!custom && <div ref={eleRef} />}
             {children}
           </div>
         )}

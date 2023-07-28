@@ -10,7 +10,7 @@ type ViewProps = Partial<any> & {
   initialLoad?: boolean
 }
 
-const ImageLazy: FC<ViewProps> = React.forwardRef(({ initialLoad = false, viewOptions = {}, src, placeholder, className, ...rest }) => {
+const ImageLazy: FC<ViewProps> = ({ initialLoad = false, viewOptions = {}, src, placeholder, className, ...rest }) => {
   const { inView, ref } = useInView({
     threshold: 0.05,
     ...viewOptions,
@@ -42,6 +42,6 @@ const ImageLazy: FC<ViewProps> = React.forwardRef(({ initialLoad = false, viewOp
       <Img {...rest} className={twMerge(className, !complete && 'hidden')} src={loaded ? src : ''} />
     </>
   )
-})
+}
 
 export default ImageLazy

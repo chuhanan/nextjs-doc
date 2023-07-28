@@ -6,6 +6,7 @@
     "dev": "cross-env ENV=development NODE_ENV=development next dev -p 3001",
     "build": "next build",
     "start": "next start -p 3001",
+    "start-stand": "node .next/standalone/server.js -p 3001",
     "lint": "next lint"
   },
   "dependencies": {
@@ -13,6 +14,8 @@
     "@types/node": "20.3.1",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.5",
+    "@weee-fe/weee-analytics": "^2.0.11",
+    "@weee-fe/weee-biz-web": "^0.0.60",
     "autoprefixer": "10.4.14",
     "cookies-next": "^2.1.2",
     "dayjs": "^1.11.9",
@@ -22,9 +25,11 @@
     "jsonwebtoken": "^9.0.1",
     "lodash": "^4.17.21",
     "minimatch": "^9.0.3",
+    "mitt": "^3.0.1",
     "negotiator": "^0.6.3",
     "next": "13.4.6",
     "next-intl": "^3.0.0-beta.7",
+    "path-to-regexp": "^6.2.1",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",

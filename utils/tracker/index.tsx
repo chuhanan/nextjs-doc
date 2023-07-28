@@ -1,4 +1,4 @@
-// import { getPageKey } from '@/tracks/getPageKey';
+import { getPageKey } from '~/utils/tracker/get-page-key'
 
 const interceptors = [
   {
@@ -78,7 +78,7 @@ export const initWeeeTracker = () => {
     baseUrl: `${preBaseUrl}/data/tracking/v2/events/track`,
     maxCacheLen: 6,
     maxWaitingTime: 3000,
-    getPageKey: `getPageKey`,
+    getPageKey: getPageKey,
   })
   window._weeeTracker = tracker
   window._weeeTracker.customPv = ({ params, pageContext }, next) => {

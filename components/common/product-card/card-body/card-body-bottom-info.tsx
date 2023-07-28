@@ -27,13 +27,13 @@ const CardBodyBottomInfo: React.FC<Partial<any>> = (props) => {
     let display2Items: any = []
     if (showAllTags) {
       display2Items = [
-        productTag && <ProductTag {...props} />,
+        productTag && <ProductTag key="ProductTag" {...props} />,
         !!remainCount && <RemainCount key="remainCount" {...props} />,
         cardType === 'vertical' && weekSoldCount && <WeeklySold key="WeeklySold" {...props} />,
       ]
     } else {
       display2Items = [
-        showActivity && productTag && <ProductTag {...props} />,
+        showActivity && productTag && <ProductTag key="ProductTag" {...props} />,
         showLeft && !!remainCount && <RemainCount key="remainCount" {...props} />,
         showWeekly && weekSoldCount && cardType === 'vertical' && <WeeklySold key="WeeklySold" {...props} />,
       ]
