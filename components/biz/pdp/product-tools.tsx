@@ -1,7 +1,7 @@
 import Link from 'next/link'
-// import Favorite from '@/components/common/ProductCard/meta/favorite';
 import Favorite from '~/components/common/product-card/favorite'
-import { WeeeIcon } from '~/components/common/icon'
+import PopupShare from '~/components/common/popup-share'
+
 type Props = {
   product: any
   shareInfo?: any
@@ -28,34 +28,36 @@ export default function ProductTools({ product, shareInfo, shareImageInfo, isGro
   // };
 
   return (
-    <div className="flex justify-between h-9 px-5 py-0 items-center">
-      {!isGroupOrder && !!product?.brand_name && (
-        <Link
-          className="w-1/3 text-interactive-standalone-idle enki-utility-base overflow-hidden text-ellipsis whitespace-nowrap"
-          prefetch={false}
-          href={product?.brand_link_url || `/brand/detail/${product?.brand_slug}/${product?.brand_key}`}
-        >
-          <span>{product?.brand_name}</span>
-        </Link>
-      )}
-      {isGroupOrder && (
-        <div className="w-1/3 text-interactive-standalone-idle enki-utility-base overflow-hidden text-ellipsis whitespace-nowrap">
-          <span>{product?.brand_name}</span>
-        </div>
-      )}
-
-      <div className="flex-1 flex justify-end items-center">
-        {product?.sold_status !== 'sold_out' && !isGroupOrder && (
-          <Favorite
-            id={id}
-            onClick={(targetCollected) => {
-              //
-            }}
-          />
+    <>
+      <div className="flex justify-between h-9 px-5 py-0 items-center">
+        {!isGroupOrder && !!product?.brand_name && (
+          <Link
+            className="w-1/3 text-interactive-standalone-idle enki-utility-base overflow-hidden text-ellipsis whitespace-nowrap"
+            prefetch={false}
+            href={product?.brand_link_url || `/brand/detail/${product?.brand_slug}/${product?.brand_key}`}
+          >
+            <span>{product?.brand_name}</span>
+          </Link>
+        )}
+        {isGroupOrder && (
+          <div className="w-1/3 text-interactive-standalone-idle enki-utility-base overflow-hidden text-ellipsis whitespace-nowrap">
+            <span>{product?.brand_name}</span>
+          </div>
         )}
 
-        <WeeeIcon type="icona-share-ios1" className="text-surface-1-fg-default-idle ml-3" style={{ fontSize: 19 }} />
+        <div className="flex-1 flex justify-end items-center">
+          {product?.sold_status !== 'sold_out' && !isGroupOrder && (
+            <Favorite
+              id={id}
+              onClick={(targetCollected) => {
+                //
+              }}
+            />
+          )}
+
+          <PopupShare />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

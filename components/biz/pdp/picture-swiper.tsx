@@ -1,18 +1,16 @@
 'use client'
 import { twMerge } from 'tailwind-merge'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import Img from '~/components/common/img'
+import { ViewportLoad } from '~/components/common/lazyload-viewport'
 
 interface IProps {
   className?: string
-  product: any
+  imageUrls: any
 }
 
 export default function Picture(props: IProps) {
-  const { className, product } = props
-  console.log(product?.media_urls, 'product?.media_urls')
-  // if (!product) {
-  //   return null
-  // }
+  const { className, imageUrls } = props
   return (
     <Swiper
       className={twMerge(
@@ -20,18 +18,19 @@ export default function Picture(props: IProps) {
         className,
       )}
       initialSlide={0}
-      key={`swiper-${product?.id}`}
-      loopedSlides={product?.media_urls?.length ?? 1}
+      loopedSlides={imageUrls.length ?? 1}
       // onSwiper={current => (imageRef.current = current)}
       // onSlidePrevTransitionEnd={onSwiperChange}
       // onSlideNextTransitionEnd={onSwiperChange}
-      pagination={product?.media_urls?.length > 1}
+      pagination={imageUrls.length > 1}
       slidesPerView="auto"
     >
-      {product?.media_urls?.map((item, index) => {
+      {imageUrls?.map((item, index) => {
         return (
           <SwiperSlide key={`filter-item-${index}`}>
-            <img alt="Weee! - Groceries Delivered" className={twMerge('block w-screen h-[100vw] max-w-[750px] max-h-[750px]')} src={item.url} />
+            <ViewportLoad initialLoad={index < 1} className="w-screen h-[100vw] max-w-[750px] max-h-[750px] bg-surface-1-bg-hover text-center">
+              <Img alt="Weee! - Groceries Delivered" className={twMerge('block w-screen h-[100vw] max-w-[750px] max-h-[750px]')} src={item.url} />
+            </ViewportLoad>
           </SwiperSlide>
         )
       })}

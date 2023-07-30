@@ -2,6 +2,7 @@ import { cookies, headers } from 'next/headers'
 import ClientChild from './_child'
 import { callApi } from '~/utils/axios'
 import { getCookie } from '~/utils/cookies'
+import { PrefertchApiList } from '~/types/common'
 import Layout from '~/components/layout/simple'
 import Logo from '~/assets/images/weee-logo-black.svg'
 import { Back } from '~/components/common/back'
@@ -13,6 +14,7 @@ import VipFreeTrialBanner from '~/components/biz/pdp/vip-free-trial-banner'
 import BodyVendorInfo from '~/components/biz/pdp/body-vendor-info'
 import ActivityList from '~/components/biz/pdp/activity-list'
 import ProductSectionsServer from '~/components/biz/pdp/product-sections-server'
+import ReviewListServer from '~/components/biz/pdp/review-list-server'
 
 interface IProductPageProps {
   params: {
@@ -84,15 +86,26 @@ export default async function MobileProductPage({ params, searchParams }: IProdu
   )
 
   return (
-    <Layout header={header}>
+    <Layout header={header} prefetchApiList={[PrefertchApiList.CART]}>
       <Picture product={productDetail?.product} />
       <BodyTag product={productDetail?.product} />
-      <VipFreeTrialBanner product={productDetail?.product} />
+      <VipFreeTrialBanner
+        vipData={{
+          vip_free_trial_banner: productDetail?.product?.vip_free_trial_banner,
+          vip_free_trial_banner_link: productDetail?.product?.vip_free_trial_banner_link,
+        }}
+      />
       <BodyVendorInfo product={productDetail?.product} />
-      <ActivityList product={productDetail?.product} />
+      <ActivityList activityData={productDetail?.activity_list} />
       {/* vip_free_trial_banner bannerCode() */}
-
+      <ReviewListServer id={+params.id} post={postInfo} />
       <ProductSectionsServer product={productDetail?.product} />
+
+      {productDetail?.product?.description_html && (
+        <div className="px-4 py-3">
+          <div dangerouslySetInnerHTML={{ __html: productDetail?.product?.description_html }}></div>
+        </div>
+      )}
       <div>mobile</div>
       <ClientChild />
     </Layout>

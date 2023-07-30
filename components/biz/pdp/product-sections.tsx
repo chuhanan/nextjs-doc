@@ -7,7 +7,8 @@ import useLazyData from '~/hooks/useLazyData'
 import LazyView from '~/components/common/lazy-view'
 import { useTranslations } from 'next-intl'
 import { callApi } from '~/utils/axios'
-import { getCookie } from '~/utils/cookies'
+import { getCookie } from '~/utils/cookie-client'
+import { ViewportLoad } from '~/components/common/lazyload-viewport'
 
 type IProps = {
   product: any
@@ -88,7 +89,7 @@ const ProductSection: FC<{
                 return (
                   <SwiperSlide key={`filter-item-${index}`}>
                     <div onClick={() => clickTrack(item?.id)}>
-                      <LazyView rootMargin="6px 0px 0px 10px" skeleton={<div></div>}>
+                      <ViewportLoad initialLoad={index < 2}>
                         <ProductCard
                           showLoadingWhenJump={showLoadingWhenJump}
                           data={item}
@@ -117,7 +118,7 @@ const ProductSection: FC<{
                           }}
                           {...productCardParam}
                         />
-                      </LazyView>
+                      </ViewportLoad>
                     </div>
                   </SwiperSlide>
                 )
@@ -131,7 +132,7 @@ const ProductSection: FC<{
 }
 
 const ProductSections: FC<IProps> = ({ product }) => {
-  const t = useTranslations('Common')
+  const t = useTranslations('ProductCard')
   const [loaded, setLoaded] = useState<boolean>(false)
   const [moduleLoaded, setModulesLoaded] = useState<boolean>(false)
   const [vendorProducts, setVendorProducts] = useState<any[]>([])
@@ -154,14 +155,13 @@ const ProductSections: FC<IProps> = ({ product }) => {
 
   const getModulesProduct = async () => {
     const requestHeader = {
-      // 'b-cookie': getCookie('b_cookie') || '',
-      // Authorization: `Bearer ${getCookie('auth_token')}`,
-      // lang: getCookie('site_lang'),
-      // 'weee-session-token': getCookie('weee_session_token') || '',
-      // 'Content-Type': 'application/json',
+      'b-cookie': getCookie('b_cookie') || '',
+      Authorization: `Bearer ${getCookie('auth_token')}`,
+      lang: getCookie('site_lang'),
+      'weee-session-token': getCookie('weee_session_token') || '',
+      'Content-Type': 'application/json',
     }
     const res = await callApi(`/ec/item/v2/items/${product?.id}/modules`, {
-      log: true,
       method: 'GET',
       body: {
         limit: 10,
@@ -169,6 +169,7 @@ const ProductSections: FC<IProps> = ({ product }) => {
       headers: requestHeader,
     })
     if (res) {
+      console.log(res, 'r=============')
       setProductModules(res?.modules || [])
     }
     setModulesLoaded(true)
@@ -176,11 +177,10 @@ const ProductSections: FC<IProps> = ({ product }) => {
 
   const getVendorSameProduct = async () => {
     const requestHeader = {
-      // 'b-cookie': getCookie('b_cookie') || '',
-      // Authorization: `Bearer ${getCookie('auth_token')}`,
-      // lang: getCookie('site_lang'),
-      // 'weee-session-token': getCookie('weee_session_token') || '',
-      // 'Content-Type': 'application/json',
+      'b-cookie': getCookie('b_cookie') || '',
+      Authorization: `Bearer ${getCookie('auth_token')}`,
+      lang: getCookie('site_lang'),
+      'weee-session-token': getCookie('weee_session_token') || '',
     }
     const res = await callApi(`/ec/item/v1/recommend/vender`, {
       method: 'GET',

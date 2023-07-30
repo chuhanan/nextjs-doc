@@ -27,13 +27,13 @@ const CardBodyBottomInfo: React.FC<Partial<any>> = (props) => {
     let display2Items: any = []
     if (showAllTags) {
       display2Items = [
-        productTag && <ProductTag {...props} />,
+        productTag && <ProductTag key="ProductTag" {...props} />,
         !!remainCount && <RemainCount key="remainCount" {...props} />,
         cardType === 'vertical' && weekSoldCount && <WeeklySold key="WeeklySold" {...props} />,
       ]
     } else {
       display2Items = [
-        showActivity && productTag && <ProductTag {...props} />,
+        showActivity && productTag && <ProductTag key="ProductTag" {...props} />,
         showLeft && !!remainCount && <RemainCount key="remainCount" {...props} />,
         showWeekly && weekSoldCount && cardType === 'vertical' && <WeeklySold key="WeeklySold" {...props} />,
       ]
@@ -46,7 +46,7 @@ const CardBodyBottomInfo: React.FC<Partial<any>> = (props) => {
       display2Items = [display2Items[0], <ShipsFrom key="ShipsFrom" {...props} className="max-w-full" />]
     }
     return display2Items
-  }, [showWeekly, showActivity, showLeft, data, showAllTags])
+  }, [showWeekly, showActivity, showLeft, data, showAllTags, cardType, productTag, props, showSoldBy, weekSoldCount])
 
   if (displayItems.length) {
     return <div className={twMerge('mt-1.5 flex flex-col justify-start items-start', className)}>{displayItems}</div>

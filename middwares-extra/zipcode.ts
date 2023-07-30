@@ -98,7 +98,7 @@ export default async function zipcodeMiddware(request, response: NextResponse) {
   const globalStateStr = getValueFromReqHeaders(request, 'global-state')
   const globalState = {} //JSON.parse(globalStateStr ? globalStateStr : '{}')
   let porderInfo: any = {}
-  let defaultZipcodeInfo = null
+  let defaultZipcodeInfo: any = {}
 
   if (Object.keys(globalState).length > 0) {
     porderInfo = globalState
@@ -107,8 +107,9 @@ export default async function zipcodeMiddware(request, response: NextResponse) {
   }
   const isOverridePage = isOverride(request)
   const searchParams = new URL(request.url).searchParams
+  const _searchZipcode = searchParams.get('zipcode') || ''
 
-  const urlZipcode = searchParams.get('zipcode') ? searchParams.get('zipcode').replace(/\D/g, '') : ''
+  const urlZipcode = _searchZipcode ? _searchZipcode.replace(/\D/g, '') : ''
 
   if (urlZipcode) {
     if (!porderInfo.zipcode) {
@@ -146,8 +147,8 @@ export default async function zipcodeMiddware(request, response: NextResponse) {
       }
       porderInfo = await createPorder(
         {
-          zipcode: defaultZipcodeInfo.zipcode || finalDefaultZipcode,
-          zipcode_type: defaultZipcodeInfo.zipcode_type,
+          zipcode: defaultZipcodeInfo?.zipcode || finalDefaultZipcode,
+          zipcode_type: defaultZipcodeInfo?.zipcode_type,
         },
         request,
         response,

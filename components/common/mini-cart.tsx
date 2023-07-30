@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { CSSProperties, FC } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { WeeeIcon } from '~/components/common/icon'
+import useGlobal from '~/store/global'
 
 type IProps = {
   onClick?: () => void
@@ -11,7 +12,8 @@ type IProps = {
 }
 const MiniCart: FC<IProps> = ({ onClick, iconStyle = {}, className = '' }) => {
   const router = useRouter()
-  const { count } = { count: 10 }
+  const { cart } = useGlobal()
+  const count = cart?.quantity || 0
   return (
     <div
       className={twMerge(

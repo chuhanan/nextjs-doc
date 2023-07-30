@@ -1,7 +1,7 @@
 export const callApi = async (url, options) => {
   const { headers: oHeaders, method, log, ...rest } = options || {}
-  const isGetMeghtod = method.toUpperCase() === 'GET'
-  let finalUrl = `${process.env.NEXT_PUBLIC_API_HOST}${url}`
+  const isGetMeghtod = method ? method.toUpperCase() === 'GET' : true
+  let finalUrl = `${process.env.NEXT_PUBLIC_API_HOST || process.env.API_HOST}${url}`
   if (isGetMeghtod && options.body) {
     const params = Object.keys(options.body)
       .map((key) => {
@@ -14,7 +14,9 @@ export const callApi = async (url, options) => {
     method: method || 'GET',
     headers: {
       ...oHeaders,
+      'Content-Type': 'application/json',
     },
+    next: { revalidate: 100 },
     ...rest,
   }
   if (isGetMeghtod) {
@@ -26,6 +28,11 @@ export const callApi = async (url, options) => {
   }
   return fetch(finalUrl, finalOptions)
     .then((res) => {
+      if (res.status >= 400) {
+        return res.json().then((data) => {
+          return Promise.reject(data)
+        })
+      }
       return res.json().then((data) => {
         return data.object
       })

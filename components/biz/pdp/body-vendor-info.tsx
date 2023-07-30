@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { WeeeIcon } from '~/components/common/icon'
+import Img from '~/components/common/img'
 
 export default function BodyVendorInfo(props) {
   const { product } = props
@@ -11,7 +12,7 @@ export default function BodyVendorInfo(props) {
       >
         {product?.vender_info_view?.vender_logo_url && (
           <div className="w-[32px] h-[32px] border flex-shrink-0 box-border border-solid rounded-2 overflow-hidden mr-2.5 border-surface-1-fg-hairline-idle">
-            <img className="w-full h-full object-cover" src={product?.vender_info_view?.vender_logo_url} alt="Weee! - Groceries Delivered" />
+            <Img className="w-full h-full object-cover" src={product?.vender_info_view?.vender_logo_url} alt="Weee! - Groceries Delivered" />
           </div>
         )}
         <div className="w-[calc(100%-50px)] flex flex-col justify-between">

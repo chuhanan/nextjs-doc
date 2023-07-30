@@ -8,10 +8,17 @@ const nextConfig = {
   images: {
     domains: ['pbs.twimg.com'],
   },
+  output: 'standalone',
   experimental: {
     esmExternals: true,
     serverActions: true,
+    legacyBrowsers: false,
   },
+  // modularizeImports: {
+  //   lodash: {
+  //     transform: 'lodash/{{member}}',
+  //   },
+  // },
 }
 
 module.exports = withNextIntl(nextConfig)

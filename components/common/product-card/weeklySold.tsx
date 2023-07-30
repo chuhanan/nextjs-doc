@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import React from 'react'
 import { twMerge } from 'tailwind-merge'
 
@@ -9,6 +10,7 @@ type Props = {
 export default function WeeklySold(props: Props) {
   const { last_week_sold_count_ui } = props?.data || {}
   const weekSoldCount = last_week_sold_count_ui !== '0' ? last_week_sold_count_ui : '' // 格式化显示的周销量
+  const t = useTranslations('ProductCard')
   return weekSoldCount ? (
     <div
       className={twMerge(
@@ -16,8 +18,7 @@ export default function WeeklySold(props: Props) {
         props.className,
       )}
     >
-      {/* {t('sold_count', { soldCount: weekSoldCount })} */}
-      已售:12
+      {t('sold_count', { soldCount: weekSoldCount })}
     </div>
   ) : null
 }

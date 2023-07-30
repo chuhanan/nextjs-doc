@@ -44,3 +44,5 @@ export const SubPageHeader = (props) => {
     </Header>
   )
 }
+
+export default SubPageHeader

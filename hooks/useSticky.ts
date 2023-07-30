@@ -13,7 +13,7 @@ interface Options {
  * @param options
  */
 const useSticky = (options?: Options) => {
-  const { scrollHeight = 47 } = options
+  const { scrollHeight = 47 } = options || {}
 
   const { ref, inView } = useInView({
     threshold: 0,
@@ -23,7 +23,7 @@ const useSticky = (options?: Options) => {
 
   useEffect(() => {
     let targetRef = options?.targetRef
-    if (options.cb) {
+    if (options?.cb) {
       options.cb(!inView)
       return
     }

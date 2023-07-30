@@ -184,6 +184,17 @@
   "Copyright": {
     "Text": "© {year} - 深圳市Weee信息技术有限公司"
   },
+  "ReviewList": {
+    "account_reviews": "晒单",
+    "more": "查看更多",
+    "common_featured": "精选"
+  },
+  "ProductCard": {
+    "pdp_same_brand": "店铺推荐",
+    "remain_count": "剩余 {remainCount}",
+    "order_soon": "剩余{quantity} - 欲购从速",
+    "sold_count": "周销量 {soldCount}"
+  },
   "Common": {
     "system_error": "系统繁忙，请稍后再试",
   "max_order_quantity_limit": "已达限量",
@@ -266,7 +277,6 @@
   "common_details": "详情",
   "dietary_needs": "饮食需求：",
   "detail_description": "描述",
-  "account_reviews": "晒单",
   "sold_count": "周销量 {{soldCount}}",
   "remaining_count": "剩余{{remainCount}}",
   "btn_view": "去选择",
